@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: demo-scheduling-quartz-posgres
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_SERVICE}:5432/quartz
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: DemoScheduler
+            instanceId: AUTO
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+            isClustered: true
+          threadPool:
+            threadCount: 5
+          plugin:
+            shutdownHook:
+              class: org.quartz.plugins.management.ShutdownHookPlugin
+              cleanShutdown: true

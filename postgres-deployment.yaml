@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-quartz-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-quartz
+  template:
+    metadata:
+      labels:
+        app: postgres-quartz
+    spec:
+      containers:
+        - name: postgres-quartz
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: quartz
+            - name: POSTGRES_USER
+              value: quartz
+            - name: POSTGRES_PASSWORD
+              value: "12345678"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-quartz-service
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres-quartz
